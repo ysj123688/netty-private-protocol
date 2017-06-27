@@ -43,7 +43,7 @@ public class NettyClient {
 						ch.pipeline().addLast("MessageEncoder",
 							new NettyMessageEncoder());
 					    ch.pipeline().addLast("readTimeoutHandler",
-						    new ReadTimeoutHandler(50));
+						    new ReadTimeoutHandler(10));
 					    ch.pipeline().addLast("LoginAuthHandler",
 						    new LoginAuthReqHandler());		
 					    ch.pipeline().addLast("HeartBeatHandler",
@@ -58,6 +58,7 @@ public class NettyClient {
 			).sync();
 			future.channel().closeFuture().sync();
 		} finally {
+			System.out.println("start reconnecting");
 			//所有资源释放完成后，清空资源，再次发起重连操作
 			executor.execute(new Runnable(){
 				@Override
